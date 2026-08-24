@@ -9,6 +9,12 @@ htmlcov/
 .venv/
 venv/
 
+# Node & Frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+
 # Environment and secrets
 .env
 .env.local
