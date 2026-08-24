@@ -1,0 +1,7 @@
+{
+  "network": "studionet",
+  "contracts": {
+    "BountyRegistry": "0x062E0e565Ef38431C6097f11697D37e97c2CdFc0",
+    "BountyVerdict": "0x76791569a919364D9B6c8a371a6F9FB79191e68E"
+  }
+}

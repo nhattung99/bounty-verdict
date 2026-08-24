@@ -6,9 +6,10 @@
 
 ## 🚀 Deployment Evidence
 
-- **Contract Address**: `0xFEb38FA9e281aF375f762633198f15c6dD907916`
 - **Network**: `studionet`
-- **Track**: Builder — Intelligent Contracts (Standalone Contract Primitive)
+- **BountyRegistry Address**: `0x062E0e565Ef38431C6097f11697D37e97c2CdFc0`
+- **BountyVerdict Address**: `0x76791569a919364D9B6c8a371a6F9FB79191e68E`
+- **Track**: Builder — Intelligent Contracts & Applications
 
 ### Worked Example Call & Consensus Verdict
 
@@ -99,16 +100,14 @@ pip install -r requirements-dev.txt
 pytest tests/test_bounty_verdict.py -v
 ```
 
-### Test Cases Covered:
-1. `test_critical_payout`: CRITICAL in-scope report triggers correct escrow payout.
-2. `test_high_payout`: HIGH in-scope report triggers correct payout.
-3. `test_invalid_no_payout`: INVALID report results in no payout and status EVALUATED.
-4. `test_out_of_scope_no_payout`: Out-of-scope report results in no payout and status EVALUATED.
-5. `test_insufficient_resubmit`: INSUFFICIENT report retains SUBMITTED status for re-evaluation.
-6. `test_empty_poc_url`: Empty PoC URL raises `UserError`.
-7. `test_invalid_url_format`: Non-http/https URL raises `UserError`.
-8. `test_program_not_active`: Submission to inactive/closed program raises `UserError`.
-9. `test_evaluate_already_evaluated`: Re-evaluating an EVALUATED report raises `UserError`.
-10. `test_web_render_fail`: Gracefully handles `web.render` network errors without VM crash.
-11. `test_double_payout_protection`: Direct unauthorized call to `execute_payout` raises `UserError`.
-12. `test_list_reports_filter`: Verifies filtering by status (SUBMITTED/EVALUATED) and program ID.
+---
+
+## 💻 Running Frontend Locally
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000` in your browser with MetaMask connected to **studionet**.
