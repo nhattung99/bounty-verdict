@@ -230,6 +230,40 @@ def test_insufficient_resubmit(direct_deploy, direct_vm, direct_alice, direct_bo
     assert rep["paid_out"] is False
 
 
+def test_insufficient_out_of_scope_resubmit(direct_deploy, direct_vm, direct_alice, direct_bob, direct_charlie):
+    registry, verdict, prog_id = setup_contracts(direct_deploy, direct_vm, direct_alice, direct_bob)
+
+    with direct_vm.prank(direct_charlie):
+        report_id = verdict.submit_report(
+            prog_id,
+            "Unknown Module",
+            "Logic Error",
+            "Insufficient evidence provided",
+            "https://gist.github.com/poc-insufficient-oos",
+            ""
+        )
+
+    direct_vm.mock_web("https://example.com/bounty-scope", "Scope page.")
+    direct_vm.mock_web("https://gist.github.com/poc-insufficient-oos", "Empty or broken page.")
+    direct_vm.mock_llm(
+        "expert blockchain security auditor",
+        json.dumps({
+            "severity": "INSUFFICIENT",
+            "in_scope": False,  # INSUFFICIENT with in_scope == False MUST still remain retryable!
+            "confidence": 15,
+            "reasoning": "PoC page returned 404. Insufficient data."
+        })
+    )
+
+    verdict.evaluate_report(report_id)
+
+    rep = json.loads(verdict.get_report(report_id))
+    # Crucial steward requirement: EVERY INSUFFICIENT ruling remains retryable (status == SUBMITTED) regardless of in_scope flag
+    assert rep["status"] == "SUBMITTED"
+    assert rep["severity"] == "INSUFFICIENT"
+    assert rep["paid_out"] is False
+
+
 def test_empty_poc_url(direct_deploy, direct_vm, direct_alice, direct_bob, direct_charlie):
     registry, verdict, prog_id = setup_contracts(direct_deploy, direct_vm, direct_alice, direct_bob)
 

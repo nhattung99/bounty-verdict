@@ -303,7 +303,10 @@ Return ONLY raw JSON, no markdown, no backticks:
         report.confidence = bigint(confidence)
         report.reasoning = reasoning
 
-        if severity in ["CRITICAL", "HIGH", "MEDIUM", "LOW"] and in_scope:
+        if severity == "INSUFFICIENT":
+            report.paid_out = False
+            report.status = "SUBMITTED"
+        elif severity in ["CRITICAL", "HIGH", "MEDIUM", "LOW"] and in_scope:
             gl.get_contract_at(self.registry_address).execute_payout(
                 report.program_id,
                 report.reporter,
@@ -311,12 +314,9 @@ Return ONLY raw JSON, no markdown, no backticks:
             )
             report.paid_out = True
             report.status = "EVALUATED"
-        elif severity == "INVALID" or not in_scope:
+        else:
             report.paid_out = False
             report.status = "EVALUATED"
-        elif severity == "INSUFFICIENT":
-            report.paid_out = False
-            report.status = "SUBMITTED"
 
         self.reports[report_id] = report
 

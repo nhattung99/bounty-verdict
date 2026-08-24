@@ -93,7 +93,7 @@ class Contract(gl.Contract):
         self.programs[program_id] = new_program
         return program_id
 
-    @gl.public.write
+    @gl.public.write.payable
     def deposit_escrow(self, program_id: str) -> None:
         if program_id not in self.programs:
             raise gl.vm.UserError("Program not found")
